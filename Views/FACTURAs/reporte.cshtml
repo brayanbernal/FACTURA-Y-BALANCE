@@ -1,0 +1,158 @@
+﻿@*@model Tuple<IEnumerable<FACYBAL.Models.FACTURA>, IEnumerable<FACYBAL.Models.ITEM_VENTA>>*@
+
+@model FACYBAL.Models.ViewModels.FacturaItemViewModel
+
+
+@{
+	ViewBag.Title = "reporte";
+	//IEnumerable<FACYBAL.Models.FACTURA> facturas = Model.Item1; 
+	//IEnumerable<FACYBAL.Models.ITEM_VENTA> itemVentas = Model.Item2;
+}
+<div class="container" style="width:100%">
+	<div class="card">
+		<div class="card-header">
+			<div class="row">
+				<br />
+				<a class="btn btn-inline btn-lg btn-warning col-md-1" style="float:left;" href="~/FACTURAs/Create" title="VOLVER">
+					<i class="" aria-hidden="true">Atras</i>
+				</a>
+				<div class="col-md-2"></div>
+				<input type="button" class="btn-info col-md-4" onclick="printDiv('areaImprimir')" value="IMPRIMIR" style="height:44px" />
+				<br />
+				<br />
+			</div>
+		</div>
+		<div class="card-body">
+			<div id="areaImprimir">
+				<br />
+				<table style=" border: black 4px solid; width:90%;font-size:12px;margin-left:10px">
+					<tr style="text-align:center">
+						<td colspan="2"> FECHA: @ViewBag.fech</td>
+					</tr>
+					<tr style=" border: black 3px solid;">
+						<td colspan="2" style="text-align:center"> VENTAS</td>
+					</tr>
+					<tr>
+						<td>EFECTIVO</td>
+						<td style="text-align:right">@ViewBag.ven_efe</td>
+					</tr>
+					<tr>
+						<td>TARJETA</td>
+						<td style="text-align:right">@ViewBag.ven_tar</td>
+					</tr>
+					<tr>
+						<td>TRANSFERECIA</td>
+						<td style="text-align:right">@ViewBag.ven_trans</td>
+					</tr>
+					<tr>
+						<td>SISTECREDIO</td>
+						<td style="text-align:right">@ViewBag.ven_sist</td>
+					</tr>
+
+					<tr style=" border: black 3px solid;">
+						<td colspan="2" style="text-align:center"> SEPARADOS</td>
+					</tr>
+					<tr>
+						<td>EFECTIVO</td>
+						<td style="text-align:right">@ViewBag.sep_efe</td>
+					</tr>
+					<tr>
+						<td>TARJETA</td>
+						<td style="text-align:right">@ViewBag.sep_tar</td>
+					</tr>
+					<tr>
+						<td>TRANSFERENCIA</td>
+						<td style="text-align:right">@ViewBag.sep_trans</td>
+					</tr>
+
+
+					<tr style=" border: black 3px solid;">
+						<td colspan="2" style="text-align:center"> TOTAL: $ @ViewBag.total </td>
+					</tr>
+					<tr>
+						<td>EFECTIVO</td>
+						<td style="text-align:right">@ViewBag.tot_efe</td>
+					</tr>
+					<tr>
+						<td>TARJETA</td>
+						<td style="text-align:right">@ViewBag.tot_tar</td>
+					</tr>
+					<tr>
+						<td>TRANSFERENCIA</td>
+						<td style="text-align:right">@ViewBag.tot_tra</td>
+					</tr>
+					<tr>
+						<td>SISTECREDITO</td>
+						<td style="text-align:right">@ViewBag.tot_sist</td>
+					</tr>
+				</table>
+				<table style=" border: black 4px solid; width:90%;font-size:12px;margin-left:10px">>
+					<tr>
+						<td>FACTURA</td>
+						<td>PAGO</td>
+						<td>
+							DESCRIPCION <br />
+							<b style="font-size:12px;">||  CANT   -||-  DESCRIPCION  || </b>
+						</td>
+					</tr>
+					@foreach (var item in Model.Facturas)
+					{
+						<tr style="font-size:12px; border: black 3px solid;">
+							<td>
+								<p>@Html.DisplayFor(modelItem => item.sep_vent)--@Html.DisplayFor(modelItem => item.id)</p>
+							</td>
+
+							<td>
+								@if (item.efectivo != 0)
+								{
+									<b>EFECTIVO: $ @Html.DisplayFor(modelItem => item.efectivo)<BR /></b>
+								}
+								@if (item.tarjeta != 0)
+								{
+									<b>@Html.DisplayFor(modelItem => item.t_cred_deb): $ @Html.DisplayFor(modelItem => item.tarjeta)<BR /></b>
+								}
+								@if (item.transferencia != 0)
+								{
+									<b>TRANSFERENCIA:$ @Html.DisplayFor(modelItem => item.transferencia)<BR /></b>
+								}
+								@if (item.sistecredito != 0)
+								{
+									<b>SISTCREDITO:$ @Html.DisplayFor(modelItem => item.sistecredito)<BR /></b>
+								}
+							</td>
+							<td>
+
+
+
+								@foreach (var item2 in Model.ItemVentas.Where(x => x.id_venta == item.id))
+								{
+									<b>@Html.DisplayFor(modelitem => item2.cantidad)    ||    </b>
+									<b>@Html.DisplayFor(modelitem => item2.descripcion)     </b>
+									<br />
+
+								}
+							</td>
+						</tr>
+					}
+
+
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+<script>
+	function printDiv(areaImprimir) {
+		var contenido = document.getElementById('areaImprimir').innerHTML;
+		var contenidoOriginal = document.body.innerHTML;
+
+		document.body.innerHTML = contenido;
+
+		window.print();
+
+		document.body.innerHTML = contenidoOriginal;
+	}
+</script>

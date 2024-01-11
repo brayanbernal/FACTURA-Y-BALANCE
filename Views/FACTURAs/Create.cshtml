@@ -1,0 +1,640 @@
+﻿@model FACYBAL.Models.ViewModels.VentasViewmodel
+
+@{
+	ViewBag.Title = "Create";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">CUARE DE CAJA</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			@using (Html.BeginForm("reporte", "FACTURAs", FormMethod.Post, new { id = "formulario1" }))
+			{
+				<div class="modal-body">
+
+					@Html.AntiForgeryToken()
+
+					<div class="row">
+						<input type="text" name="dia" class="form-control col-md-4" placeholder="DIA" id="d1" required />
+						<input type="text" name="mes" class="form-control col-md-4" placeholder="MES" id="m1" required />
+						<input type="text" name="anio" class="form-control col-md-4" placeholder="AÑO" id="a1" required />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">CERRAR</button>
+					<input type="button" class="btn-info col-md-4" onclick="hoy();" value="HOY" />
+					<input type="submit" class="btn btn-primary" />
+				</div>
+			}
+		</div>
+	</div>
+</div> 
+
+@using (Html.BeginForm("Create", "FACTURAs", FormMethod.Post, new { id = "formulario" }))
+{
+	@Html.AntiForgeryToken()
+	<div class="container" style="width:100%;background-color:rgba(208, 211, 212, .8);border-radius:50px">
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		<div class="card" style="width:99%;padding-left:20px">
+			<div class="card-header" style="text-align:center;background-color:#3498DB ;color:white;border-radius:20px"> <h3>FACTURA</h3></div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="col-md-6"><label class="form-control"><input type="radio" id="sep_vent" name="sep_vent" value="VENTA" checked> VENTA</label></div>
+						<div class="col-md-6"><label class="form-control"><input type="radio" id="sep_vent1" name="sep_vent" value="SEPARADO"> SEPARADO </label></div>
+					</div>
+					<div class="col-lg-4">
+	<button type="button" class="btn btn-inline btn-md btn-primary" data-toggle="modal" data-target="#exampleModal1" style="float:right">CUADRE CAJA</button>
+</div>
+					<div class="col-lg-4"></div>
+				</div>
+				<br />
+
+				<div class="row">
+					<div class="col-lg-4">
+						DOCUMENTO CLIENTE:
+						@Html.EditorFor(model => model.doc_cliente, new { htmlAttributes = new { @class = "form-control", @type = "number",@required="required" } })
+						
+					</div>
+					<div class="col-lg-4">
+						NOMBRE CLIENTE:
+						@Html.EditorFor(model => model.n_cliente, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+						
+					</div>
+					<div class="col-lg-4">
+						TELEFONO:
+						@Html.EditorFor(model => model.tel, new { htmlAttributes = new { @class = "form-control", @type = "number", @required = "required" } })
+						
+					</div>
+				</div>
+				<br />
+
+				<div class="row">
+					<div class="col-lg-4">
+						METODO DE PAGO:
+						<select id="m_pago" class="form-control">
+							<option value="EFECTIVO">EFECTIVO</option>
+							<option value="TARJETA">TARJETA</option>
+							<option value="TRANSFERENCIA">TRANSFERENCIA</option>
+							<option value="SISTECREDITO">SISTECREDITO</option>
+							<option value="EFECTIVO Y TARJETA">EFECTIVO Y TARJETA</option>
+							<option value="EFECTIVO Y TRANSFERENCIA">EFECTIVO Y TRANSFERENCIA</option>
+							<option value="EFECTIVO Y SISTECREDITO">EFECTIVO Y SISTECREDITO</option>
+							<option value="TARJETA Y SISTECREDITO">TARJETA Y SISTECREDITO</option>
+							<option value="TRANSFERENCIA Y SISTECREDITO">TRANSFERENCIA Y SISTECREDITO</option>
+						</select>
+					</div>
+
+					<div class="col-lg-4" id="t_cred_deb1">
+						<br />
+						<div class="col-md-6"><label class="form-control"><input type="radio" id="t_cred_deb" name="t_cred_deb" value="TARJETA CREDITO">TC</label></div>
+						<div class="col-md-6"><label class="form-control"><input type="radio" id="t_cred_deb1" name="t_cred_deb" value="TARJETA DEBITO"> TB </label></div>
+					</div>
+					<div class="col-lg-4" id="tipo_tarjeta1">
+						TIPO DE TARJETA
+						<select id="tipo_tarjeta" name="tipo_tarjeta" class="form-control">
+							<option value=" ">--SELECCIONE OPCION--</option>
+							<option value="VISA">VISA</option>
+							<option value="MASTERCARD">MASTERCARD</option>
+							<option value="DINERS">DINERS</option>
+							<option value="AMERICAN EXPRESS">AMERICAN EXPRESS</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="card" style="width:99%;padding-left:20px">
+						<div class="card-header" style="text-align:center;background-color:#3498DB ;color:white;border-radius:20px"> <h3>PRODUCTOS</h3></div>
+						<div class="card-body">
+
+							<div class="row">
+								<div class="col-lg-1">
+									CODIGO1:
+									<input type="number" id="codigo1" class="form-control" />
+
+								</div>
+								<div class="col-lg-1">
+									CODIGO2
+									<input type="number" id="codigo2" class="form-control" />
+								</div>
+								<div class="col-lg-4">
+									DESCRIPCION:
+									<input type="text" id="descripcion" class="form-control" />
+								</div>
+								<div class="col-lg-4">
+									CANTIDAD:
+									<input type="number" id="cantidad" value="0" class="form-control" />
+								</div>
+								<div class="col-lg-2">
+									PRECIO UNITARIO:
+									<input type="number" id="precio" class="form-control" />
+
+								</div>
+							</div>
+							<br />
+							<div class="row">
+								<div class="col-lg-5"></div>
+								<div class="col-lg-2"><input type="button" id="agregart" class="btn btn-warning" onclick="Agregar(); return false;" value="Agregar item" /></div>
+								<div class="col-lg-5"></div>
+							</div>
+							<br />
+							<div class="row" id="items">
+								<div class="col-lg-8">
+									<table id="tablaItems" style="width:100%;" class="table table-striped">
+										<thead>
+											<tr style="background-color:#34495E;color:white;">
+												<th>CANTIDAD</th>
+												<th>DESCRIPCION</th>
+												<th>PRECIO/U</th>
+												<th>PRECIO/T</th>
+											</tr>
+										</thead>
+										<tbody style="text-align:center"></tbody>
+									</table>
+								</div>
+								<div class="col-lg-4">
+									@Html.DropDownList("n_empl", null,"--ASISTENTE DE VENTA--", htmlAttributes: new { @class = "form-control" })
+									TOTAL DE VENTA
+									<input type="number" class="form-control" id="total_articulos" readonly />
+									<div id="efectivo1_1">
+										RECIBE EN EFECTIVO:
+										<input type="number" class="form-control" value="0" id="efectivo1" />
+									</div>
+									<div id="tarjeta1_1">
+										RECIBE EN TARJETA:
+										<input type="number" class="form-control" value="0" id="tarjeta1" />
+									</div>
+									<div id="transferencia1_1">
+										RECIBE EN TRANSFERENCIA:
+										<input type="number" class="form-control" value="0" id="transferencia1" />
+									</div>
+									<input type="hidden" class="form-control" value="0" id="tarjeta" name="tarjeta" />
+									<input type="hidden" class="form-control" value="0" id="efectivo" name="efectivo" />
+									<input type="hidden" class="form-control" value="0" id="transferencia" name="transferencia" />
+									<input type="hidden" class="form-control" value="0" id="sistecredito" name="sistecredito" />
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-lg-4"></div>
+					<div class="col-lg-4">
+						<input type="submit" value="Create" class="btn btn-default" />
+					</div>
+					<div class="col-lg-4"></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+}
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	<script>
+
+		var num = 0;
+		let precio_total = 0;
+		$("#t_cred_deb1").hide();
+		$("#tipo_tarjeta1").hide();
+		$("#tarjeta1_1").hide();
+		$("#transferencia1_1").hide();
+
+		function Agregar() {
+			//BLOQUEAR CAMPO DE SESSIONES
+
+			let cod1 = document.getElementById("codigo1").value;
+			let cod2 = document.getElementById("codigo2").value;
+			let desc = document.getElementById("descripcion").value;
+			let cantidad = document.getElementById("cantidad").value;
+			let precio_u = document.getElementById("precio").value;
+			let precio_t = 0;
+
+			if (cod1 == null || cod2 == null || desc == null || cantidad == null || cod1 == " " || cod2 == " " || desc == " " || cantidad == " ") {
+				alert("EXISTEN CAMPOS VACIOS EN LA SECCION DE PRODUCTO");
+			} else {
+				if (cantidad <= 0) {
+					alert("CANTIDAD DEBE SER MAYOR A CERO");
+				} else {
+					let tabla = document.getElementById("tablaItems");
+
+					// propiedades de la tabla
+					let TR = document.createElement("tr");
+					let TDcantidad = document.createElement("td");
+					let TDdescripcion = document.createElement("td");
+					let TDprecio_u = document.createElement("td");
+					let TDprecio_t = document.createElement("td");
+
+					TR.appendChild(TDcantidad);
+					TR.appendChild(TDdescripcion);
+					TR.appendChild(TDprecio_u);
+					TR.appendChild(TDprecio_t);
+					//*********calculamos precio tot del articulo******//
+					precio_t = parseFloat(precio_u) * parseFloat(cantidad);
+					precio_total = parseFloat(precio_t) + parseFloat(precio_total);//// recordatorio colocar este valor en un label
+
+
+					//***************************************************
+
+
+					//agregamos el texto a la tabla
+					TDcantidad.innerHTML = cantidad;
+					TDdescripcion.innerHTML = desc;
+					TDprecio_u.innerHTML = precio_u;
+					TDprecio_t.innerHTML = precio_t;
+
+					tabla.appendChild(TR);
+					// agrgamos los hidens los que se enviaranpor post
+					let divItems = document.getElementById("items");
+
+					let HiddenIndex = document.createElement("input")
+					let Hiddencod1 = document.createElement("input")
+					let Hiddencod2 = document.createElement("input")
+					let Hiddencant = document.createElement("input")
+					let Hiddendesc = document.createElement("input")
+					let Hiddenprecio_u = document.createElement("input")
+
+
+					HiddenIndex.name = "items.Index";
+					HiddenIndex.value = num;
+					HiddenIndex.type = "hidden";
+
+					Hiddencod1.name = "items[" + num + "].codigo1";
+					Hiddencod1.value = cod1;
+					Hiddencod1.type = "hidden";
+
+					Hiddencod2.name = "items[" + num + "].codigo2";
+					Hiddencod2.value = cod2;
+					Hiddencod2.type = "hidden";
+
+					Hiddendesc.name = "items[" + num + "].descripcion";
+					Hiddendesc.value = desc;
+					Hiddendesc.type = "hidden";
+
+					Hiddenprecio_u.name = "items[" + num + "].precio";
+					Hiddenprecio_u.value = precio_u;
+					Hiddenprecio_u.type = "hidden";
+
+					Hiddencant.name = "items[" + num + "].cantidad";
+					Hiddencant.value = cantidad;
+					Hiddencant.type = "hidden";
+
+					// AGREGAMOS LOS HIDDEN AL DIV items
+					divItems.appendChild(HiddenIndex);
+					divItems.appendChild(Hiddencod1);
+					divItems.appendChild(Hiddencod2);
+					divItems.appendChild(Hiddendesc);
+					divItems.appendChild(Hiddenprecio_u);
+					divItems.appendChild(Hiddencant);
+
+					//colocando los campos vacios
+					document.getElementById("codigo1").value = "";
+					document.getElementById("codigo2").value = "";
+					document.getElementById("descripcion").value = "";
+					document.getElementById("cantidad").value = "";
+					document.getElementById("precio").value = "";
+					document.getElementById("total_articulos").value = precio_total;
+					num++; // aumenta contador
+
+				}
+			}
+		}
+		////////////// TIPO DE PAGO EFECTIVO O TARJETA
+		$(document).ready(function () {
+			$("#m_pago").change(function () {
+				let pago_en = document.getElementById("m_pago").value;
+				let sep_vent = document.querySelector('input[name="sep_vent"]:checked').value;
+				if (sep_vent == "VENTA") {
+					switch (pago_en) {
+						case "EFECTIVO":
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							$("#efectivo1_1").show();
+							break;
+						case "TARJETA":
+							$("#t_cred_deb1").show();
+							$("#tipo_tarjeta1").show();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "TRANSFERENCIA":
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "SISTECREDITO":
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "EFECTIVO Y TRANSFERENCIA":
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").show();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "EFECTIVO Y TARJETA":
+							$("#t_cred_deb1").show();
+							$("#tipo_tarjeta1").show();
+							$("#efectivo1_1").show();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "EFECTIVO Y SISTECREDITO":
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").show();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "TARJETA Y SISTECREDITO":
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").show();
+							$("#transferencia1_1").hide();
+							break;
+						case "TRANSFERENCIA Y SISTECREDITO":
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").show();
+							break;
+					}
+				} else {
+					switch (pago_en) {
+						case "EFECTIVO":
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							$("#efectivo1_1").show();
+							break;
+						case "TARJETA":
+							$("#t_cred_deb1").show();
+							$("#tipo_tarjeta1").show();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").show();
+							$("#transferencia1_1").hide();
+							break;
+						case "TRANSFERENCIA":
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").show();
+							break;
+						case "SISTECREDITO":
+							alert("NO SE PUEDE CREAR SEPARADO CON SISTECREDITO");
+							document.getElementById("m_pago").value = "EFECTIVO";
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "EFECTIVO Y TRANSFERENCIA":
+							alert("NO SE PUEDE CREAR SEPARADO CON EFECTIVO Y TRANSFERENCIA");
+							document.getElementById("m_pago").value = "EFECTIVO";
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "EFECTIVO Y TARJETA":
+							alert("NO SE PUEDE CREAR SEPARADO CON EFECTIVO Y TARJETA");
+							document.getElementById("m_pago").value = "EFECTIVO";
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "EFECTIVO Y SISTECREDITO":
+							alert("NO SE PUEDE CREAR SEPARADO CON EFECTIVO Y SISTECREDITO");
+							document.getElementById("m_pago").value = "EFECTIVO";
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "TARJETA Y SISTECREDITO":
+							alert("NO SE PUEDE CREAR SEPARADO CON TARJETA Y SISTECREDITO");
+							document.getElementById("m_pago").value = "EFECTIVO";
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+						case "TRANSFERENCIA Y SISTECREDITO":
+							alert("NO SE PUEDE CREAR SEPARADO CON TRANSFERENCIA Y SISTECREDITO");
+							document.getElementById("m_pago").value = "EFECTIVO";
+							$("#t_cred_deb1").hide();
+							$("#tipo_tarjeta1").hide();
+							$("#efectivo1_1").hide();
+							$("#tarjeta1_1").hide();
+							$("#transferencia1_1").hide();
+							break;
+					}
+				}
+			});
+		});
+
+		/////////////////// VALIDACION DE FORMULARIO
+		///VALIDAR FORMULARIO
+		document.addEventListener("DOMContentLoaded", function () {
+			document.getElementById("formulario").addEventListener('submit', validarFormulario);
+		});
+		function validarFormulario(evento) {
+			evento.preventDefault();
+			let sep_vent = document.querySelector('input[name="sep_vent"]:checked').value;
+			let efectivo1 = document.getElementById("efectivo1").value;
+			let tarjeta1 = document.getElementById("tarjeta1").value;
+			let transferencia1 = document.getElementById("transferencia1").value;
+			let m_pago = document.getElementById("m_pago").value;
+
+			
+
+
+
+			switch (sep_vent) {
+				case "VENTA":
+					if (efectivo1 < precio_total && m_pago == "EFECTIVO") {
+						alert("VERIFICAR METODO DE PAGO EL MONTO INGRESADO ES MENOR AL MONTO TOTAL A PAGAR, CAMBIAR A SEPARADO.");
+					}
+					else {
+						if (efectivo1 >= precio_total && m_pago == "EFECTIVO") {
+							cambio = parseFloat(efectivo1) - parseFloat(precio_total);
+							document.getElementById("efectivo").value = precio_total;
+							document.getElementById("tarjeta").value = 0;
+							document.getElementById("transferencia").value = 0;
+							document.getElementById("sistecredito").value = 0;
+							alert("SU CAMBIO ES: " + cambio);
+							this.submit();	
+						}
+						if (m_pago == "TARJETA") {
+							document.getElementById("tarjeta").value = precio_total;
+							document.getElementById("efectivo").value = 0;
+							document.getElementById("transferencia").value = 0;
+							document.getElementById("sistecredito").value = 0;
+							this.submit();
+						}
+						if (m_pago == "TRANSFERENCIA") {
+							document.getElementById("tarjeta").value = 0;
+							document.getElementById("efectivo").value = 0;
+							document.getElementById("transferencia").value = precio_total;
+							document.getElementById("sistecredito").value = 0;
+							this.submit();
+						}
+						if (efectivo1 <= precio_total && m_pago == "SISTECREDITO") {
+							document.getElementById("efectivo").value = 0;
+							document.getElementById("tarjeta").value = 0;
+							document.getElementById("sistecredito").value = precio_total;
+							this.submit();
+						}
+						if (efectivo1 <= precio_total && m_pago == "EFECTIVO Y TARJETA") {
+							document.getElementById("efectivo").value = efectivo1;
+							document.getElementById("transferencia").value = 0;
+							document.getElementById("sistecredito").value = 0;
+							document.getElementById("tarjeta").value = parseFloat(precio_total) - parseFloat(efectivo1);
+							this.submit();
+						}
+
+						if (efectivo1 <= precio_total && m_pago == "EFECTIVO Y TRANSFERENCIA") {
+							document.getElementById("efectivo").value = efectivo1;
+							document.getElementById("tarjeta").value = 0;
+							document.getElementById("sistecredito").value = 0;
+							document.getElementById("transferencia").value = parseFloat(precio_total) - parseFloat(efectivo1);
+							this.submit();
+						}
+
+						if (efectivo1 <= precio_total && m_pago == "EFECTIVO Y SISTECREDITO") {
+							document.getElementById("efectivo").value = efectivo1;
+							document.getElementById("tarjeta").value = 0;
+							document.getElementById("sistecredito").value = parseFloat(precio_total) - parseFloat(efectivo1);
+							document.getElementById("transferencia").value = 0;
+							this.submit();
+						}
+						if (efectivo1 <= precio_total && m_pago == "TARJETA Y SISTECREDITO") {
+							document.getElementById("efectivo").value = 0;
+							document.getElementById("tarjeta").value = tarjeta1;
+							document.getElementById("sistecredito").value = parseFloat(precio_total) - parseFloat(tarjeta1);
+							document.getElementById("transferencia").value = 0;
+							this.submit();
+						}
+						if (efectivo1 <= precio_total && m_pago == "TRANSFERENCIA Y SISTECREDITO") {
+							document.getElementById("efectivo").value = 0;
+							document.getElementById("tarjeta").value = 0;
+							document.getElementById("sistecredito").value = parseFloat(precio_total) - parseFloat(transferencia1);
+							document.getElementById("transferencia").value = transferencia1;
+							this.submit();
+						}
+					}
+					break;
+				case "SEPARADO":
+					if (m_pago == "EFECTIVO") {
+						document.getElementById("efectivo").value = efectivo1;
+						document.getElementById("tarjeta").value = 0;
+						document.getElementById("sistecredito").value = 0;
+						document.getElementById("transferencia").value = 0;
+						this.submit();
+					}
+					if (m_pago == "TARJETA") {
+						document.getElementById("efectivo").value = 0;
+						document.getElementById("tarjeta").value = tarjeta1;
+						document.getElementById("sistecredito").value = 0;
+						document.getElementById("transferencia").value = 0;
+						this.submit();
+					}
+					if (m_pago == "TRANSFERENCIA") {
+						document.getElementById("efectivo").value = 0;
+						document.getElementById("tarjeta").value = 0;
+						document.getElementById("sistecredito").value = 0;
+						document.getElementById("transferencia").value = transferencia1;
+						this.submit();
+					}
+					if (m_pago == "SISTECREDITO") {
+						document.getElementById("efectivo").value = 0;
+						document.getElementById("tarjeta").value = 0;
+						document.getElementById("sistecredito").value = 0;
+						document.getElementById("transferencia").value = 0;
+						alert("NO SE PUEDE CREAR SEPARADO CON SISTECREDITO");
+						document.getElementById("m_pago").value = "EFECTIVO";
+					}
+					if (m_pago == "EFECTIVO Y TARJETA") {
+						document.getElementById("efectivo").value = 0;
+						document.getElementById("tarjeta").value = 0;
+						document.getElementById("sistecredito").value = 0;
+						document.getElementById("transferencia").value = 0;
+						alert("NO SE PUEDE CREAR SEPARADO CON EFECTIVO Y TARJETA SELECCIONE SOLO UNA DE LAS DOS");
+						document.getElementById("m_pago").value = "EFECTIVO";
+					}
+
+					if (m_pago == "EFECTIVO Y TRANSFERENCIA") {
+						document.getElementById("efectivo").value = 0;
+						document.getElementById("tarjeta").value = 0;
+						document.getElementById("sistecredito").value = 0;
+						document.getElementById("transferencia").value = 0;
+						alert("NO SE PUEDE CREAR SEPARADO CON EFECTIVO Y TRANSFERENCIA SELECCIONE SOLO UNA DE LAS DOS");
+						document.getElementById("m_pago").value = "EFECTIVO";
+					}
+					if (m_pago == "EFECTIVO Y SISTECREDITO") {
+						document.getElementById("efectivo").value = 0;
+						document.getElementById("tarjeta").value = 0;
+						document.getElementById("sistecredito").value = 0;
+						document.getElementById("transferencia").value = 0;
+						alert("NO SE PUEDE CREAR SEPARADO CON EFECTIVO Y SISTECREDITO SELECCIONE EFECTIVO");
+						document.getElementById("m_pago").value = "EFECTIVO";
+					}
+					if (m_pago == "TRANSFERENCIA Y SISTECREDITO") {
+						document.getElementById("efectivo").value = 0;
+						document.getElementById("tarjeta").value = 0;
+						document.getElementById("sistecredito").value = 0;
+						document.getElementById("transferencia").value = 0;
+						alert("NO SE PUEDE CREAR SEPARADO CON TRANSFERENCIA Y SISTECREDITO SELECCIONE TRANSFERENCIA");
+						document.getElementById("m_pago").value = "EFECTIVO";
+					}
+					if (m_pago == "TARJETA Y SISTECREDITO") {
+						document.getElementById("efectivo").value = 0;
+						document.getElementById("tarjeta").value = 0;
+						document.getElementById("sistecredito").value = 0;
+						document.getElementById("transferencia").value = 0;
+						alert("NO SE PUEDE CREAR SEPARADO CON TARJETA Y SISTECREDITO SELECCIONE TARJETA");
+						document.getElementById("m_pago").value = "EFECTIVO";
+					}
+
+					break;
+			}
+		}
+		function hoy() {
+			document.getElementById('d1').value = @DateTime.Now.Day;
+			document.getElementById('m1').value = @DateTime.Now.Month;
+			document.getElementById('a1').value = @DateTime.Now.Year;
+		}
+	</script>
+}

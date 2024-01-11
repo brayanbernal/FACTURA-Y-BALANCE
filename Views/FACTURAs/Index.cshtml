@@ -1,0 +1,105 @@
+﻿@model IEnumerable<FACYBAL.Models.FACTURA>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.fecha)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.efectivo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tarjeta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tipo_tarjeta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.t_cred_deb)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sep_vent)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.total_venta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.consecutivo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.n_cliente)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.doc_cliente)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.costo_tot)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EMPLEADO.n_empleado)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.fecha)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.efectivo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tarjeta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tipo_tarjeta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.t_cred_deb)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sep_vent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.total_venta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.consecutivo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.n_cliente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.doc_cliente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.costo_tot)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EMPLEADO.n_empleado)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

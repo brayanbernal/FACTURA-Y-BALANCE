@@ -1,0 +1,108 @@
+﻿@model IEnumerable<FACYBAL.Models.FACTURA>
+
+@{
+    ViewBag.Title = "IndexAbonos";
+}
+<div class="container" style="width:100%;background-color:rgba(208, 211, 212, .8);border-radius:50px">
+	<div class="card">
+		<div class="card-header" style="text-align:center;background-color:#566573;color:white;border-radius:20px">
+			<h3>LISTA DE PACIENTES</h3>
+
+		</div>
+		<div class="card-body">
+			<table id="myTable" class="table table-striped">
+				<thead>
+					<tr style="background-color:#6367b0;color:white">
+						<th>
+							FECHA
+						</th>
+						<th>
+							N° FACTURA
+						</th>
+						<th>
+							DOC_CLIENTE
+						</th>
+						<th>
+							NOM_CLIENTE
+						</th>
+						<th>
+							SEPARADO O SISTECREDITO
+						</th>
+						<th>
+							TOTAL FACTURA
+						</th>
+						<th>
+							ABONADO
+						</th>
+						<th>
+							SALDO
+						</th>
+
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td>
+								@Html.DisplayFor(modelItem => item.fecha_sep)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.consecutivo)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.doc_cliente)
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.n_cliente) 
+							</td>
+							<td>
+								@if (item.sep_vent != "SEPARADO")
+								{
+									<LABEL>SISTECREDITO</LABEL>
+								}else
+								{
+								@Html.DisplayFor(modelItem => item.sep_vent)
+								}
+							</td>
+							<td>
+								@Html.DisplayFor(modelItem => item.total_venta)
+							</td>
+							<td>
+								@{
+									
+									decimal suma =Convert.ToDecimal(item.efectivo + item.tarjeta+item.transferencia);
+								}
+
+								@suma
+							</td>
+							<td>
+								@{
+
+									decimal saldo = Convert.ToDecimal(item.total_venta-( item.efectivo + item.tarjeta + item.transferencia));
+								}
+								@saldo
+							</td>
+							<td>
+								@if (Convert.ToDecimal(saldo)!= Convert.ToDecimal(0))
+								{
+								<a id="editar" class="btn btn-inline btn-xs btn-success" href="/FACTURAs/Abono?id=@item.id" title="Editar">
+									<i class="" aria-hidden="true">ABONAR</i>
+								</a>
+								}
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<br />
+	<br />
+</div>
+
+
+
+
+

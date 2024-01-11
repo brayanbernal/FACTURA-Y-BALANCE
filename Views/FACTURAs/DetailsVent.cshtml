@@ -1,0 +1,191 @@
+﻿@model FACYBAL.Models.FACTURA
+
+@{
+	ViewBag.Title = "Details";
+}
+<div class="container" style="width:100%">
+	
+	<div class="card">
+		<div class="card-header" style="align-items:center;">
+			<br />
+			
+			<a class="btn btn-inline btn-lg btn-warning" style="float:left" href="~/FACTURAs/Create" title="VOLVER">
+				<i class="" aria-hidden="true">Atras</i>
+			</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" class="btn-info " onclick="printDiv('areaImprimir')" value="IMPRIMIR FACTURA" style="height:44px" />
+			<br />
+			<br />
+
+		</div>
+		<div class="card-body">
+			<div id="areaImprimir">
+
+				<br />
+				<div class="row">
+					<div class="col-xs-1"></div>
+					<div class="col-md-11">
+						<h1 style=" text-align: center;"><img src="~/Content/imgs/prestigios.jpg" style="width:250px;height:120px" /></h1>
+
+
+
+						<h1 style=" text-align: center;font-family:Courier New, Courier, monospace;font-size:12px"><b>NIT: 13014422-3</b></h1>
+						<h1 style=" text-align: center;font-family:Courier New, Courier, monospace;font-size:12px"><b>Direccion: Carrera 7 #12A-40</b></h1>
+						<h1 style=" text-align: center;font-family:Courier New, Courier, monospace;font-size:12px"><b>Telefono: 602 7255681-- +57 3147225394</b></h1>
+						<h1 style=" text-align: center;font-family:Courier New, Courier, monospace;font-size:12px"><b>COMPROBANTE DE ENTREGA</b></h1>
+						<hr width=100% style="border-color:black">
+
+						<table style="width:90%;margin-left:10px">
+							<tr style="font-size:12px">
+								<td width="25%" style="font-family:Courier New, Courier, monospace;"><b>FECHA:@Html.DisplayFor(model => model.fecha)</b></td>
+								<td width="5%" style="font-family:Courier New, Courier, monospace;"></td>
+								<td width="50%" style="font-family:Courier New, Courier, monospace;"><b>FACTURA #  :@Html.DisplayFor(model => model.consecutivo)</b></td>
+							</tr>
+
+						</table>
+
+						<table style="width:90%;margin-left:10px">
+							<thead></thead>
+							<tbody>
+								<tr style="font-size:12px">
+									<td width="30%" style="font-family:Courier New, Courier, monospace;"><br /><b>DOCUMENTO CLIENTE :</b></td>
+									<td width="5%" style="font-family:Courier New, Courier, monospace;"><br /></td>
+									<td width="50%" style="font-family:Courier New, Courier, monospace;"><br /><b>@Html.DisplayFor(model => model.doc_cliente)</b></td>
+								</tr>
+								<tr style="font-size:12px">
+									<td width="30%" style="font-family:Courier New, Courier, monospace;"><br /><b>NOMBRE CLIENTE :</b></td>
+									<td width="5%" style="font-family:Courier New, Courier, monospace;"><br /></td>
+									<td width="50%" style="font-family:Courier New, Courier, monospace;"><br /><b>@Html.DisplayFor(model => model.n_cliente)</b></td>
+								</tr>
+									<tr style="font-size:12px">
+									<td width="30%" style="font-family:Courier New, Courier, monospace;"><br /><b>TELEFONO:</b></td>
+									<td width="5%" style="font-family:Courier New, Courier, monospace;"><br /></td>
+									<td width="50%" style="font-family:Courier New, Courier, monospace;"><br /><b>@Html.DisplayFor(model => model.tel)</b></td>
+								</tr>
+
+							</tbody>
+						</table>
+
+
+						<hr width=50% style="border-color:black">
+						<br />
+						<div>
+							<table class="table-bordered" style="width:90%;margin-left:10px">
+						<thead style="font-size:12px;width:500px">
+							<tr style="font-size:12px;font-family:Courier New, Courier, monospace;">
+								<td><b>Cant</b></td>
+								<td><b>Desc</b></td>
+								<td><b>tot</b></td>
+
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item2 in Model.ITEM_VENTA.Where(x => x.id_venta == Model.id))
+							{
+								<tr style="font-size:12px;font-family:Courier New, Courier, monospace;">
+									<td><b>@Html.DisplayFor(modelitem => item2.cantidad)</b></td>
+									<td><b>@Html.DisplayFor(modelitem => item2.descripcion)</b></td>
+									<td><b>$ @Html.DisplayFor(modelitem => item2.tot_articulo)</b></td>
+								</tr>
+							}
+
+						</tbody>
+					</table>
+				</div>
+				<br />
+				<table style="width:70%;margin-left:10px">
+					<thead></thead>
+					<tbody>
+
+						<tr>
+
+							<td width="50%" style="font-size:12px;text-align:left;font-family:Courier New, Courier, monospace;"><b>iva incluido</b></td>
+							<td width="50%" style="font-size:12px;text-align:right;font-family:Courier New, Courier, monospace;"><b>19%</b></td>
+						</tr>
+						<tr>
+							<td width="50%" style="font-size:12px;text-align:left;font-family:Courier New, Courier, monospace;"><b>TOTAL A PAGAR :</b></td>
+							<td width="50%" style="font-size:12px;text-align:right;font-family:Courier New, Courier, monospace;"><b>$ @Html.DisplayFor(model => model.total_venta)</b></td>
+						</tr>
+					</tbody>
+				</table>
+
+
+				<hr width=50% style="border-color:black">
+
+				<h6 style="text-align:center;font-size:12PX;font-family:Courier New, Courier, monospace;"><b>METODO DE PAGO PAGO :</b></h6>
+				<table style="width:80%;margin-left:10px">
+					@if (Model.efectivo != 0)
+					{
+						<tr style="font-size:12PX;">
+							<td width="50%" style="text-align:left;font-family:Courier New, Courier, monospace;"><b>EFECTIVO :</b></td>
+
+							<td width="50%" style="text-align:right;font-family:Courier New, Courier, monospace;"><b>$ @Html.DisplayFor(model => model.efectivo)</b></td>
+						</tr>
+					}
+					@if (Model.transferencia != 0)
+					{
+						<tr style="font-size:12PX;">
+							<td width="50%" style="text-align:left;font-family:Courier New, Courier, monospace;"><b>TRANSFERENCIA :</b></td>
+
+							<td width="50%" style="text-align:right;font-family:Courier New, Courier, monospace;"><b>$ @Html.DisplayFor(model => model.transferencia)</b></td>
+						</tr>
+					}
+					@if (Model.tarjeta != 0)
+					{
+						<tr style="font-size:12PX;">
+							<td width="50%" style="text-align:left;font-family:Courier New, Courier, monospace;"><b>TARJETA :</b></td>
+
+							<td width="50%" style="text-align:right;font-family:Courier New, Courier, monospace;"><b>$ @Html.DisplayFor(model => model.tarjeta)</b></td>
+						</tr>
+					}
+					@if (Model.sistecredito != 0)
+					{
+						<tr style="font-size:12PX;">
+							<td width="50%" style="text-align:left;font-family:Courier New, Courier, monospace;"><b>SISTECREDITO:</b></td>
+
+							<td width="50%" style="text-align:right;font-family:Courier New, Courier, monospace;"><b>$ @Html.DisplayFor(model => model.sistecredito)</b></td>
+						</tr>
+					}
+				</table>
+				<hr width=50% style="border-color:black">
+				<table style="margin-left:10px">
+					<thead></thead>
+					<tbody>
+
+						<tr>
+							<td width="50%" style="font-size:12px;font-family:Courier New, Courier, monospace;"><b>ATENDIDO POR:</b></td>
+
+							<td width="50%" style="font-size:12px;font-family:Courier New, Courier, monospace;"><b>@Html.DisplayFor(model => model.EMPLEADO.n_empleado)</b></td>
+						</tr>
+					</tbody>
+				</table>
+							<br />
+							<h1 style="text-align:center;font-family:Courier New, Courier, monospace;font-size:12px"><b>-----------GRACIAS POR SU COMPRA----------</b></h1>
+							<h1 style="text-align:center;font-family:Courier New, Courier, monospace;font-size:12px"><b>-------------¡VUELVA PRONTO!--------------</b></h1>
+							<br />
+							<br />
+							<br />
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>
+
+
+
+
+<script>
+
+	function printDiv(areaImprimir) {
+		var contenido = document.getElementById('areaImprimir').innerHTML;
+		var contenidoOriginal = document.body.innerHTML;
+
+		document.body.innerHTML = contenido;
+
+		window.print();
+
+		document.body.innerHTML = contenidoOriginal;
+	}
+
+
+</script>

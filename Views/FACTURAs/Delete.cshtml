@@ -1,0 +1,128 @@
+﻿@model FACYBAL.Models.FACTURA
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>FACTURA</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.efectivo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.efectivo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tarjeta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tarjeta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tipo_tarjeta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tipo_tarjeta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.t_cred_deb)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.t_cred_deb)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sep_vent)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sep_vent)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.total_venta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.total_venta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.consecutivo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.consecutivo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.n_cliente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.n_cliente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.doc_cliente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.doc_cliente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.costo_tot)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.costo_tot)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EMPLEADO.n_empleado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EMPLEADO.n_empleado)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

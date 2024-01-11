@@ -1,0 +1,239 @@
+﻿@model FACYBAL.Models.FACTURA
+
+@{
+	/**/
+
+	ViewBag.Title = "Edit";
+}
+@using (Html.BeginForm("Abono", "FACTURAs", FormMethod.Post, new { id = "formulario" }))
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+	@Html.HiddenFor(model => model.id)
+	@Html.HiddenFor(model => model.sistecredito)
+	@Html.HiddenFor(model => model.costo_tot)
+	@Html.HiddenFor(model => model.tipo_tarjeta)
+	@Html.HiddenFor(model => model.t_cred_deb)
+	@Html.HiddenFor(model => model.sep_vent)
+	@Html.HiddenFor(model => model.n_empl)
+	@Html.HiddenFor(model => model.fecha_sep)
+
+	<div class="container" style="width:100%;background-color:rgba(208, 211, 212, .8);border-radius:50px">
+		<div class="card" style="width:99%;padding-left:20px">
+			<div class="card-header" style="text-align:center;background-color:#3498DB ;color:white;border-radius:20px"> <h3>ABONO A FACTURA</h3></div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-4">
+						FECHA:
+						@Html.EditorFor(model => model.fecha, new { htmlAttributes = new { @class = "form-control", @VALUE = DateTime.Now.ToString("dd/MM/yyyy") } })
+						
+					</div>
+					<div class="col-md-4">
+						N° FACTURA:
+						@Html.EditorFor(model => model.consecutivo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+						
+					</div>
+					<div class="col-md-4"> </div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						DOCUMENTO CLIENTE:
+						@Html.EditorFor(model => model.doc_cliente, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+						
+					</div>
+					<div class="col-md-4">
+						NOMBRE DE CLIENTE:
+						@Html.EditorFor(model => model.n_cliente, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+						
+					</div>
+					<div class="col-md-4">
+						TELEFONO:
+						@Html.EditorFor(model => model.tel, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+						
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						TOTAL VENTA: $
+						@Html.EditorFor(model => model.total_venta, new { htmlAttributes = new { @class = "form-control", @ID = "total_venta", @readonly = "readonly" } })
+						
+					</div>
+					<div class="col-md-4">
+						SALDO:
+						<input type="number" class="form-control" id="saldo" readonly />
+					</div>
+					<div class="col-md-4"></div>
+
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<div class="card" style="width:99%;padding-left:20px">
+							<div class="card-header" style="text-align:center;background-color:#F4D03F  ;color:white;border-radius:20px"> <h3>TOTAL ABONADO </h3></div>
+							<div class="card-body">
+								<div class="row">
+									EFECTIVO:
+									@Html.EditorFor(model => model.efectivo, new { htmlAttributes = new { @class = "form-control", @ID = "efectivo", @readonly = "readonly" } })
+								
+								</div>
+								<div class="row">
+									TARJETA:
+									@Html.EditorFor(model => model.tarjeta, new { htmlAttributes = new { @class = "form-control", @ID = "tarjeta", @readonly = "readonly" } })
+								
+								</div>
+								<div class="row">
+									TRANSFERENCIA:
+									@Html.EditorFor(model => model.transferencia, new { htmlAttributes = new { @class = "form-control", @ID = "transferencia", @readonly = "readonly" } })
+								
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card" style="width:99%;padding-left:20px">
+							<div class="card-header" style="text-align:center;background-color:#E74C3C ;color:white;border-radius:20px"> <h3>ABONAR EN </h3></div>
+							<div class="card-body">
+								<div class="row">
+									EFECTIVO:
+									<input type="number" class="form-control" id="efectivo1" name="efectivo1" value="0" />
+								</div>
+								<div class="row">
+									TARJETA:
+									<input type="number" class="form-control" id="tarjeta1" name="tarjeta1" value="0" />
+								</div>
+								<div class="row">
+									TRANSFERENCIA:
+									<input type="number" class="form-control" id="transferencia1" name="transferencia1" value="0" />
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<input type="submit" value="GUARDAR ABONO" class="btn btn-info" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4"></div>
+					<div class="col-md-4"><br /></div>
+					<div class="col-md-4"></div>
+				</div>
+				<br />
+			</div>
+		</div>
+
+
+	</div>
+}
+
+<div>
+	@Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+	<script>
+
+		let efectivo = document.getElementById("efectivo").value;
+		let tarjeta = document.getElementById("tarjeta").value;
+		let transferencia = document.getElementById("transferencia").value;
+		let total_venta = document.getElementById("total_venta").value;
+
+
+
+
+
+		$(document).ready(function () {
+			$("#efectivo1").keyup(function () {
+				var saldo = parseFloat(total_venta) - parseFloat(efectivo) - parseFloat(tarjeta) - parseFloat(transferencia);
+
+				let efectivo1 = document.getElementById("efectivo1").value;
+				let tarjeta1 = document.getElementById("tarjeta1").value;
+				let transferencia1 = document.getElementById("transferencia1").value;
+
+				if (efectivo1 == null || efectivo1 == "") {
+					efectivo1 = 0
+				} if (tarjeta1 == null || tarjeta1 == "") {
+					tarjeta1 = 0
+				} if (transferencia1 == null || transferencia1 == "") {
+					transferencia1 = 0
+				}if (transferencia == null || transferencia == "") {
+					transferencia = 0
+				}
+				saldo = parseFloat(total_venta) - parseFloat(efectivo) - parseFloat(tarjeta) - parseFloat(transferencia) - parseFloat(efectivo1) - parseFloat(tarjeta1) - parseFloat(transferencia1);
+				document.getElementById("saldo").value = saldo;
+			});
+		});
+
+		$(document).ready(function () {
+			$("#tarjeta1").keyup(function () {
+				var saldo = parseFloat(total_venta) - parseFloat(efectivo) - parseFloat(tarjeta) - parseFloat(transferencia);
+
+				let efectivo1 = document.getElementById("efectivo1").value;
+				let tarjeta1 = document.getElementById("tarjeta1").value;
+				let transferencia1 = document.getElementById("transferencia1").value;
+
+				if (efectivo1 == null || efectivo1 == "") {
+					efectivo1 = 0
+				} if (tarjeta1 == null || tarjeta1 == "") {
+					tarjeta1 = 0
+				} if (transferencia1 == null || transferencia1 == "") {
+					transferencia1 = 0
+				}
+				saldo = parseFloat(total_venta) - parseFloat(efectivo) - parseFloat(tarjeta) - parseFloat(transferencia) - parseFloat(efectivo1) - parseFloat(tarjeta1) - parseFloat(transferencia1);
+				document.getElementById("saldo").value = saldo;
+			});
+		});
+
+		$(document).ready(function () {
+			$("#transferencia1").keyup(function () {
+				var saldo = parseFloat(total_venta) - parseFloat(efectivo) - parseFloat(tarjeta) - parseFloat(transferencia);
+
+				let efectivo1 = document.getElementById("efectivo1").value;
+				let tarjeta1 = document.getElementById("tarjeta1").value;
+				let transferencia1 = document.getElementById("transferencia1").value;
+
+				if (efectivo1 == null || efectivo1 == "") {
+					efectivo1 = 0
+				} if (tarjeta1 == null || tarjeta1 == "") {
+					tarjeta1 = 0
+				} if (transferencia1 == null || transferencia1 == "") {
+					transferencia1 = 0
+				}
+				saldo = parseFloat(total_venta) - parseFloat(efectivo) - parseFloat(tarjeta) - parseFloat(transferencia) - parseFloat(efectivo1) - parseFloat(tarjeta1) - parseFloat(transferencia1);
+				document.getElementById("saldo").value = saldo;
+			});
+		});
+
+
+		document.addEventListener("DOMContentLoaded", function () {
+			document.getElementById("formulario").addEventListener('submit', validarFormulario);
+		});
+		function validarFormulario(evento) {
+			evento.preventDefault();
+			let efectivo1 = document.getElementById("efectivo1").value;
+			let tarjeta1 = document.getElementById("tarjeta1").value;
+			let transferencia1 = document.getElementById("transferencia1").value;
+			let saldo = document.getElementById("saldo").value;
+
+			if (saldo < 0) {
+				alert("EL ABONO EXCEDE AL TOTAL DE FACTURA");
+			} else {
+					this.submit();
+			}
+		}
+
+
+
+
+	</script>
+
+
+	@Scripts.Render("~/bundles/jqueryval")
+}
